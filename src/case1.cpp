@@ -1,4 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/generators/catch_generators_adapters.hpp>
 
 // https://leetcode.cn/problems/add-two-numbers/description/
 
@@ -9,6 +11,49 @@ struct ListNode {
   ListNode(int x) : val(x), next(nullptr) {}
   ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
+
+namespace {
+class ListGenerator final : public Catch::Generators::IGenerator<ListNode *> {
+public:
+  explicit ListGenerator(int ival) : value(makeList(ival)) {}
+  ListNode *const &get() const override;
+  bool next() override;
+
+private:
+  ListNode *const value;
+  static ListNode *makeList(int value);
+};
+
+ListNode *ListGenerator::makeList(int value) {
+  ListNode *result = nullptr;
+  ListNode *previous = nullptr;
+  do {
+    int remainder = value % 10;
+    ListNode *current = new ListNode;
+    current->val = remainder;
+    current->next = nullptr;
+    if (previous == nullptr) {
+      previous = current;
+      result = previous;
+    } else {
+      previous->next = current;
+      previous = current;
+    }
+    value /= 10;
+  } while (value > 0);
+  return result;
+}
+
+ListNode *const &ListGenerator::get() const { return this->value; }
+
+bool ListGenerator::next() { return false; }
+
+Catch::Generators::GeneratorWrapper<ListNode *> list(int value) {
+  return Catch::Generators::GeneratorWrapper<ListNode *>(
+      new ListGenerator(value));
+}
+
+} // namespace
 
 class Solution {
 public:
@@ -83,4 +128,6 @@ TEST_CASE("Case 1", "[sum]") {
   head->next = temp;
   auto sum = (new Solution)->addTwoNumbers(l1, l2);
   REQUIRE(sum->val == 7);
+  auto l3 = GENERATE(list(123));
+  REQUIRE(l3->val == 3);
 }
