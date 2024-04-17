@@ -1,5 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <memory>
 #include <string>
+#include <tuple>
 
 // https://leetcode.cn/problems/longest-palindromic-substring/
 
@@ -62,17 +65,15 @@ public:
 };
 
 TEST_CASE("Case 1", "[longest palindrome]") {
-  auto solution = new Solution;
-  auto lp = solution->longestPalindrome("babad");
-  REQUIRE("bab" == lp);
-  lp = solution->longestPalindrome("cbbd");
-  REQUIRE("bb" == lp);
-  lp = solution->longestPalindrome("ccc");
-  REQUIRE("ccc" == lp);
-  lp = solution->longestPalindrome("aaaa");
-  REQUIRE("aaaa" == lp);
-  lp = solution->longestPalindrome("aaaab");
-  REQUIRE("aaaa" == lp);
-  lp = solution->longestPalindrome("aaaaa");
-  REQUIRE("aaaaa" == lp);
+  auto solution = std::make_unique<Solution>();
+  SECTION("official cases") {
+    string input, expect;
+    std::tie(input, expect) = GENERATE(table<string, string>(
+        {std::make_tuple("babad", "bab"), std::make_tuple("cbbd", "bb"),
+         std::make_tuple("ccc", "ccc"), std::make_tuple("aaaa", "aaaa"),
+         std::make_tuple("aaaab", "aaaa"), std::make_tuple("aaaaa", "aaaaa")}));
+    auto got = solution->longestPalindrome(input);
+    CAPTURE(input);
+    REQUIRE(got == expect);
+  }
 }
