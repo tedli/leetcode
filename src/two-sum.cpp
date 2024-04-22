@@ -50,7 +50,7 @@ template <> struct StringMaker<TwoSumCase> {
 
 TEST_CASE("Case 1", "[two sum]") {
   auto solution = make_unique<Solution>();
-  SECTION("two official cases") {
+  SECTION("two sum official cases") {
     TwoSumCase input;
     vector<int> expect;
     tie(input, expect) = GENERATE(table<TwoSumCase, vector<int>>(
