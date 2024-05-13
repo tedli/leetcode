@@ -25,7 +25,7 @@ public:
       return digit->second;
     }
     int value = 0;
-    for (auto i = s.begin(); i != s.end(); i++) {
+    for (auto i = s.begin(); i != s.end(); ++i) {
       string current;
       if (auto st = special.find(*i);
           st != special.end() && i + 1 != s.end() &&
