@@ -15,60 +15,117 @@ using namespace std;
 class Solution {
 public:
   vector<vector<int>> threeSum(vector<int> &nums) {
-    unordered_multimap<int, int> index;
+    auto result = vector<vector<int>>();
+    sort(nums.begin(), nums.end());
+    for (auto i = nums.begin(); i != nums.end(); ++i) {
+      if (i != nums.begin() && *i == *(i - 1))
+        continue;
+      auto k = nums.end() - 1;
+      for (auto j = i + 1; j != nums.end(); ++j) {
+        if (j != i + 1 && *j == *(j - 1))
+          continue;
+        while (j < k && *j + *k > -*i)
+          --k;
+        if (j == k)
+          break;
+        if (*j + *k == -*i)
+          result.push_back({*i, *j, *k});
+      }
+    }
+    return result;
+  }
+
+  vector<vector<int>> threeSum2(vector<int> &nums) {
+    int n = nums.size();
+    sort(nums.begin(), nums.end());
+    vector<vector<int>> ans;
+    // 枚举 a
+    for (int first = 0; first < n; ++first) {
+      // 需要和上一次枚举的数不相同
+      if (first > 0 && nums[first] == nums[first - 1]) {
+        continue;
+      }
+      // c 对应的指针初始指向数组的最右端
+      int third = n - 1;
+      int target = -nums[first];
+      // 枚举 b
+      for (int second = first + 1; second < n; ++second) {
+        // 需要和上一次枚举的数不相同
+        if (second > first + 1 && nums[second] == nums[second - 1]) {
+          continue;
+        }
+        // 需要保证 b 的指针在 c 的指针的左侧
+        while (second < third && nums[second] + nums[third] > target) {
+          --third;
+        }
+        // 如果指针重合，随着 b 后续的增加
+        // 就不会有满足 a+b+c=0 并且 b<c 的 c 了，可以退出循环
+        if (second == third) {
+          break;
+        }
+        if (nums[second] + nums[third] == target) {
+          ans.push_back({nums[first], nums[second], nums[third]});
+        }
+      }
+    }
+    return ans;
+  }
+
+  vector<vector<int>> threeSum1(vector<int> &nums) {
+    unordered_map<int, int> index;
     const int size = nums.size();
     for (int i = 0; i < size; ++i) {
       index.insert({nums[i], i});
     }
-    set<vector<int>> result;
     set<tuple<int, int>> known;
+    set<vector<int>> result;
     for (int i = 0; i < size; ++i) {
-      int v = nums[i];
       for (int j = i + 1; j < size; ++j) {
-        int a = nums[j];
+        int a = nums[i];
+        int b = nums[j];
         tuple<int, int> key;
-        if (v > a) {
-          key = make_tuple(a, v);
+        if (a > b) {
+          key = make_tuple(b, a);
         } else {
-          key = make_tuple(v, a);
+          key = make_tuple(a, b);
         }
         if (auto ki = known.find(key); ki != known.end()) {
           continue;
         }
         known.insert(key);
-        int want = INT_MIN;
-        if (v == 0) {
-          if (a == 0) {
-            want = 0;
+        int c;
+        if (a == 0) {
+          if (b == 0) {
+            c = 0;
           } else {
-            want = -a;
+            c = -b;
           }
         } else {
-          if (a == 0) {
-            want = -v;
+          if (b == 0) {
+            c = -a;
           } else {
-            want = -(v + a);
+            c = -(a + b);
           }
         }
-        auto b = index.equal_range(want);
-        for (auto bi = b.first; bi != b.second; ++bi) {
-          if (auto bii = bi->second; bii > j) {
-            auto bv = nums[bii];
-            auto triple = vector<int>{v, a, bv};
+        auto range = index.equal_range(c);
+        for (auto ri = range.first; ri != range.second; ++ri) {
+          if (int ci = ri->second; ci > j) {
+            auto triple = vector<int>{a, b, c};
             sort(triple.begin(), triple.end());
             result.insert(triple);
-            if (v > bv) {
-              key = make_tuple(bv, v);
+            if (a > c) {
+              key = make_tuple(c, a);
             } else {
-              key = make_tuple(v, bv);
+              key = make_tuple(a, c);
             }
             known.insert(key);
-            if (a > bv) {
-              key = make_tuple(bv, a);
+            if (b > c) {
+              key = make_tuple(c, b);
             } else {
-              key = make_tuple(a, bv);
+              key = make_tuple(b, c);
             }
             known.insert(key);
+            break;
           }
         }
       }
