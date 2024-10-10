@@ -134,9 +134,9 @@ public:
   }
 };
 
-TEST_CASE("Case 1", "[3sum-prefix]") {
+TEST_CASE("Case 1", "[3sum]") {
   auto solution = make_unique<Solution>();
-  SECTION("3sum-prefix official cases") {
+  SECTION("3sum official cases") {
     vector<int> input;
     vector<vector<int>> expect;
     tie(input, expect) = GENERATE(table<vector<int>, vector<vector<int>>>(
