@@ -191,3 +191,6 @@ buildtrees
 deps
 compile_commands.json
 debug
+bazel-*
+external
+MODULE.bazel.lock

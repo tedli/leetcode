@@ -17,25 +17,25 @@ class Solution {
 public:
   vector<string> generateParenthesis(int n) {
     static array<vector<string>, 9> memory;
-    static const function<reference_wrapper<vector<string>>(int)> generate(
+    static const function<reference_wrapper<vector<string>>(int)> generate =
         [](int n) -> reference_wrapper<vector<string>> {
-          if (!memory[n].empty())
-            return ref(memory[n]);
-          if (n == 0) {
-            memory[0] = vector<string>{""};
-          } else {
-            auto result = vector<string>();
-            for (int i = 0; i != n; ++i) {
-              auto lefts = generate(i).get();
-              auto rights = generate(n - i - 1).get();
-              for (auto left : lefts)
-                for (auto right : rights)
-                  result.push_back("(" + left + ")" + right);
-            }
-            memory[n] = result;
-          }
-          return ref(memory[n]);
-        });
+      if (!memory[n].empty())
+        return ref(memory[n]);
+      if (n == 0) {
+        memory[0] = vector<string>{""};
+      } else {
+        auto result = vector<string>();
+        for (int i = 0; i != n; ++i) {
+          auto lefts = generate(i).get();
+          auto rights = generate(n - i - 1).get();
+          for (auto left : lefts)
+            for (auto right : rights)
+              result.push_back("(" + left + ")" + right);
+        }
+        memory[n] = result;
+      }
+      return ref(memory[n]);
+    };
     return generate(n).get();
   }
 };
