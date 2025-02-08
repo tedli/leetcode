@@ -2,7 +2,7 @@
 #include <ostream>
 #include <vector>
 
-std::ostream &operator<<(std::ostream &out, Utils::ListNode *const &value) {
+static void writeOutput(std::ostream &out, Utils::ListNode const *value) {
   out << "[";
   for (auto i = value; i != nullptr; i = i->next) {
     if (i != value)
@@ -10,6 +10,21 @@ std::ostream &operator<<(std::ostream &out, Utils::ListNode *const &value) {
     out << i->val;
   }
   out << "]";
+}
+
+std::ostream &operator<<(std::ostream &out, Utils::ListNode *const &value) {
+  writeOutput(out, value);
+  return out;
+};
+
+std::ostream &operator<<(std::ostream &out, Utils::ListNode const *&value) {
+  writeOutput(out, value);
+  return out;
+};
+
+std::ostream &operator<<(std::ostream &out,
+                         Utils::ListNode const *const &value) {
+  writeOutput(out, value);
   return out;
 };
 
