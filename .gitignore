@@ -187,7 +187,6 @@ fabric.properties
 .cache
 .vscode
 build
-!BUILD
 buildtrees
 deps
 compile_commands.json
