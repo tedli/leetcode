@@ -3,8 +3,8 @@ include_guard()
 include(cmake/utils.cmake)
 
 FetchContent_DeclareGitHubTarWithMirror(catch2
-  catchorg/Catch2 v3.12.0
-  SHA256=E077079F214AFC99FEE940D91C14CF1A8C1D378212226BB9F50EFFF75FE07B23
+  catchorg/Catch2 v3.15.0
+  SHA256=9650c55e497759cc39b977e45524bc8acb15256061c112080916ab6cb0b1ea66
 )
 
 FetchContent_MakeAvailableWithArgs(catch2

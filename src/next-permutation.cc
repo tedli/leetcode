@@ -15,7 +15,7 @@ namespace NextPermutation {
 class Solution {
 public:
   void nextPermutation(vector<int> &nums) {
-    optional<vector<int>::iterator> left;
+    auto left = optional<vector<int>::iterator>();
     for (auto i = nums.rbegin() + 1; i != nums.rend(); ++i) {
       if (*i < *(i - 1)) {
         left = (++i).base();
