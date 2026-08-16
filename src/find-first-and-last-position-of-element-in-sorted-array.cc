@@ -1,3 +1,4 @@
+#include "nums-target.h"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 #include <memory>
@@ -62,37 +63,14 @@ public:
 };
 } // namespace FindFirstAndLastPositionOfElementInSortedArray
 
-struct FindFirstAndLastPositionOfElementInSortedArrayCase {
-  vector<int> nums;
-  int target;
-};
-
-namespace Catch {
-template <>
-struct StringMaker<FindFirstAndLastPositionOfElementInSortedArrayCase> {
-  static string
-  convert(FindFirstAndLastPositionOfElementInSortedArrayCase const &value) {
-    stringstream buffer;
-    buffer << "<[";
-    if (!value.nums.empty()) {
-      buffer << value.nums[0];
-      for (size_t i = 1; i < value.nums.size(); ++i) {
-        buffer << ", " << value.nums[i];
-      }
-    }
-    buffer << "], " << value.target << ">";
-    return buffer.str();
-  }
-};
-} // namespace Catch
-
 TEST_CASE("Case 1",
           "[find-first-and-last-position-of-element-in-sorted-array]") {
   using Solution = FindFirstAndLastPositionOfElementInSortedArray::Solution;
+  using FindFirstAndLastPositionOfElementInSortedArrayCase =
+      Utils::NumsTargetInput;
   auto solution = make_unique<Solution>();
-  SECTION("find-first-and-last-"
-          "positiFindFirstAndLastPositionOfElementInSortedArrayon-of-element-"
-          "in-sorted-array official cases") {
+  SECTION("find-first-and-last-position-of-element-in-sorted-array official "
+          "cases") {
     FindFirstAndLastPositionOfElementInSortedArrayCase input;
     vector<int> expect;
     tie(input, expect) = GENERATE(
