@@ -13,7 +13,10 @@ namespace ValidSudoku {
 class Solution {
 public:
   bool isValidSudoku(vector<vector<char>> &board) {
-    auto columns = array<unordered_set<char>, 9>();
+    auto columns = []<size_t... Is>(index_sequence<Is...>) {
+      return array<unordered_set<char>, 9>{
+          ((void)Is, unordered_set<char>(9))...};
+    }(make_index_sequence<9>{});
     for (auto i = board.begin(); i != board.end(); ++i) {
       auto row = unordered_set<char>(9);
       for (auto j = i->begin(); j != i->end(); ++j) {
