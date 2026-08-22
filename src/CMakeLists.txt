@@ -1,3 +1,5 @@
-aux_source_directory(. LEETCODE_SRC)
-add_executable(leetcode ${LEETCODE_SRC})
+aux_source_directory(archived LEETCODE_SRC)
+aux_source_directory(202608 LEETCODE_SRC)
+add_executable(leetcode main.cc ${LEETCODE_SRC})
+target_include_directories(leetcode PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(leetcode PRIVATE Catch2::Catch2)
